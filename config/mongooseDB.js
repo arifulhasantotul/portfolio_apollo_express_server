@@ -1,8 +1,8 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const connectMongooseDB = async () => {
   const uri =
-    process.env.NODE_ENV !== 'development'
+    process.env.NODE_ENV !== "development"
       ? process.env.MONGODB_CONNECTION_STRING
       : process.env.MONGOS_CONNECTION_STRING;
   try {
@@ -11,15 +11,17 @@ const connectMongooseDB = async () => {
       useUnifiedTopology: true,
     });
     console.log(
-      `${
-        process.env.NODE_ENV === 'development' ? 'Mongoose' : 'MongoDB'
-      } Connected Successfully😍. Host: ${mongo.connection.host}`.cyan.underline
-        .bold
+      `                ` +
+        `✅ ${
+          process.env.NODE_ENV === "development" ? "Mongoose" : "MongoDB"
+        } Connected Successfully😍. Host: ${mongo.connection.host}`.cyan
+          .underline.bold +
+        `\n==========================================================================================`
     );
   } catch (err) {
     console.log(
       `${
-        process.env.NODE_ENV === 'development' ? 'Mongoose' : 'MongoDB'
+        process.env.NODE_ENV === "development" ? "Mongoose" : "MongoDB"
       } Connection Failed: ${err.message}`.bgRed.bold
     );
   }

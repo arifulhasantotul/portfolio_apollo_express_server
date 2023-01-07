@@ -1,33 +1,35 @@
+const models = require("../../models");
+
 const projectResolvers = {
   Query: {
-    listProject: async (parent, args, { models }) => {
+    listProject: async (parent, args, context) => {
       return await models.DB_Project.find({});
     },
-    getProject: async (parent, args, { models }) => {
+    getProject: async (parent, args, context) => {
       return await models.DB_Project.findById(args.id);
     },
-    getProjectBySlug: async (parent, args, { models }) => {
+    getProjectBySlug: async (parent, args, context) => {
       return await models.DB_Project.find({ slug: args.slug });
     },
   },
 
   // POPULATE: getting population data using  graphQL query
   Project: {
-    categories: async (parent, args, { models }) => {
+    categories: async (parent, args, context) => {
       return await models.DB_Category.find({
         _id: { $in: parent.categoriesId },
       });
     },
-    tags: async (parent, args, { models }) => {
+    tags: async (parent, args, context) => {
       return await models.DB_Tag.find({ _id: { $in: parent.tagsId } });
     },
-    client: async (parent, args, { models }) => {
+    client: async (parent, args, context) => {
       return await models.DB_People.findById(parent.clientId);
     },
   },
 
   Mutation: {
-    createProject: async (parent, args, { models }) => {
+    createProject: async (parent, args, context) => {
       const newProject = new models.DB_Project({
         name: args.input.name,
         slug: args.input.slug,
@@ -68,7 +70,7 @@ const projectResolvers = {
 
       return project;
     },
-    updateProject: async (parent, args, { models }) => {
+    updateProject: async (parent, args, context) => {
       const updateProjectInfo = new models.DB_Project({
         _id: args.id,
         name: args.input.name,
@@ -116,7 +118,7 @@ const projectResolvers = {
 
       return updateProject;
     },
-    deleteProject: async (parent, args, { models }) => {
+    deleteProject: async (parent, args, context) => {
       const project = await models.DB_Project.findByIdAndDelete(args.id);
       // NOTE: removing projectsId from category
       if (project?.categoriesId?.length > 0) {

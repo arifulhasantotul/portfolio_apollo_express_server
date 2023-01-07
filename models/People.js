@@ -15,6 +15,7 @@ const peopleSchema = Schema(
       required: true,
       trim: true,
       lowercase: true,
+      unique: true,
     },
     password: {
       type: String,
@@ -27,13 +28,19 @@ const peopleSchema = Schema(
     phone: {
       type: String,
       trim: true,
+      // bellow 3 lines will make sure that field is unique and indexed and will have no problem when multiple users are trying to register using null phone number
+      index: {
+        unique: true,
+        partialFilterExpression: { phone: { $type: "string" } },
+      },
     },
     avatar: {
       type: String,
     },
     role: {
       type: String,
-      enum: ["Admin", "User", "Editor", "Moderator"],
+      enum: ["Admin", "Visitor", "Editor", "Moderator"],
+      default: "Visitor",
     },
     cloudinary_id: {
       type: String,
